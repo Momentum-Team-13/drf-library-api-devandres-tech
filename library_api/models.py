@@ -15,7 +15,7 @@ class Book(BaseModel):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     publication_date = models.DateTimeField()
     genre = models.TextField()
-	featured = models.BooleanField()
+    featured = models.BooleanField()
 
     class Meta:
         constraints = [
@@ -24,23 +24,23 @@ class Book(BaseModel):
 
 
 class BookTracker(BaseModel):
-	WANT = 1
-	READING = 2
-	READ = 3
-	STATUS = (
-		(WANT,  ('Want to read')),
-		(READING, ('Reading')),
-		(READ, ('Read')),
-		)
-	user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	book = models.ForeignKey(Book, on_delete=models.CASCADE)
-	status = models.PositiveSmallIntegerField(choices=STATUS, default=WANT)
+    WANT = 1
+    READING = 2
+    READ = 3
+    STATUS = (
+        (WANT,  ('Want to read')),
+        (READING, ('Reading')),
+        (READ, ('Read')),
+        )
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    status = models.PositiveSmallIntegerField(choices=STATUS, default=WANT)
 
 
 class Note(BaseModel):
-	user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-	book = models.ForeignKey(Book, on_delete=models.CASCADE)
-	note = models.TextField()
-	# private notes only viewable by the author (or user?)
-	public_status = models.BooleanField()
-	page = models.IntegerField(null=True)
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    note = models.TextField()
+    # private notes only viewable by the author (or user?)
+    public_status = models.BooleanField()
+    page = models.IntegerField(null=True)
