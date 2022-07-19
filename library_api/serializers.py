@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 
 class BookSerializer(serializers.ModelSerializer):
-	author = serializers.ReadOnlyField(source='owner.username')
+	author = serializers.ReadOnlyField(source='author.username')
 
 	class Meta:
 		model = Book
