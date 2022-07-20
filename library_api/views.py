@@ -2,6 +2,7 @@ from rest_framework import generics, permissions
 from library_api.serializers import BookSerializer
 from library_api.models import Book
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 # auth users can get and create books
@@ -12,8 +13,9 @@ class BookListCreate(generics.ListCreateAPIView):
 	queryset = Book.objects.all()
 	serializer_class = BookSerializer
 	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-	filter_backends = [DjangoFilterBackend]
+	filter_backends = [DjangoFilterBackend, filters.SearchFilter]
 	filterset_fields = ['featured']
+	search_fields = ['author', 'title']
 
 
 # auth users can see book details
