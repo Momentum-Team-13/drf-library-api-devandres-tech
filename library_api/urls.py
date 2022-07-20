@@ -3,7 +3,10 @@ from django.urls import path, include
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
-	path('books/', views.BookList.as_view()),
+	path('books/', views.BookListCreate.as_view()),
+	path('books/<int:pk>', views.BookDetails.as_view()),
+	path('books/<int:pk>', views.BookDestroy.as_view()),
+	path('books/<int:pk>', views.BookUpdate.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
