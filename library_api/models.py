@@ -12,7 +12,7 @@ class BaseModel(models.Model):
 
 class Book(BaseModel):
     title = models.TextField(max_length=275)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    author = models.TextField(max_length=275)
     publication_date = models.DateTimeField()
     genre = models.TextField()
     featured = models.BooleanField()
@@ -40,7 +40,6 @@ class BookTracker(BaseModel):
 class Note(BaseModel):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    note = models.TextField()
-    # private notes only viewable by the author (or user?)
+    note = models.TextField(max_length=300)
     public_status = models.BooleanField()
     page = models.IntegerField(null=True)
