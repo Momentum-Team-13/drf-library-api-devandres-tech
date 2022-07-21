@@ -59,7 +59,8 @@ class BookTrackerListCreate(generics.ListCreateAPIView):
 	queryset = BookTracker.objects.prefetch_related('book')
 	serializer_class = BookTrackerSerializer
 	permission_classes = [permissions.IsAuthenticated]
-	filter_backends = [IsOwnerFilterBackend]
+	filter_backends = [DjangoFilterBackend, IsOwnerFilterBackend]
+	filterset_fields = ["status"]
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
