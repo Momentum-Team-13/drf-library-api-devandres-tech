@@ -5,6 +5,7 @@ from library_api.filters import IsOwnerFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.contrib.auth.models import User
+from library_api.permissions import IsOwner
 
 
 # auth users can get and create books
@@ -43,6 +44,7 @@ class BookDestroy(generics.DestroyAPIView):
 	serializer_class = BookSerializer
 	permission_classes = [permissions.IsAdminUser]
 
+
 # gets all users in db
 class UserList(generics.ListAPIView):
 	queryset = User.objects.all()
@@ -63,8 +65,10 @@ class BookTrackerListCreate(generics.ListCreateAPIView):
 		serializer.save(user=self.request.user)
 
 
-class BookTrackerUpdate(generics.UpdateAPIView):
+# only let object owners get, update and destroy a single instance
+# GET, PUT, DELETE api/book-trackers/<int:pk>
+class BookTrackerRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 	queryset = BookTracker.objects.all()
 	serializer_class = BookTrackerSerializer
-	permission_classes = [permissions.IsAuthenticated]
+	permission_classes = [permissions.IsAuthenticated, IsOwner]
 	filter_backends = [IsOwnerFilterBackend]

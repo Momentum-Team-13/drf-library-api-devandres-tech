@@ -28,5 +28,6 @@ class BookTrackerSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = BookTracker
-		fields = ['id', 'book_status', 'book', 'user', 'book_details']
+		fields = "__all__"
+		# fields = ['id', 'book_status', 'book', 'user', 'book_details']
 
