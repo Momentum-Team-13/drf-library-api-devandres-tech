@@ -36,6 +36,11 @@ class BookTracker(BaseModel):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField(choices=STATUS, default=WANT)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['book', 'user'], name='unique_book_tracker')
+        ]
+
 
 class Note(BaseModel):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)

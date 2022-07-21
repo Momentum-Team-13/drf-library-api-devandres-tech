@@ -53,7 +53,8 @@ class UserList(generics.ListAPIView):
 # their own book trackers
 # GET, POST api/book-trackers/
 class BookTrackerListCreate(generics.ListCreateAPIView):
-	queryset = BookTracker.objects.all()
+	# Album.objects.prefetch_related('tracks')
+	queryset = BookTracker.objects.prefetch_related('book')
 	serializer_class = BookTrackerSerializer
 	permission_classes = [permissions.IsAuthenticated]
 	filter_backends = [IsOwnerFilterBackend]
@@ -66,3 +67,4 @@ class BookTrackerUpdate(generics.UpdateAPIView):
 	queryset = BookTracker.objects.all()
 	serializer_class = BookTrackerSerializer
 	permission_classes = [permissions.IsAuthenticated]
+	filter_backends = [IsOwnerFilterBackend]
