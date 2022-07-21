@@ -32,7 +32,7 @@ class BookTracker(BaseModel):
         (READING, ('Reading')),
         (READ, ('Read')),
         )
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    user = models.ForeignKey('auth.User', related_name='book_tracker', on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField(choices=STATUS, default=WANT)
 

@@ -1,8 +1,9 @@
 from rest_framework import generics, permissions
-from library_api.serializers import BookSerializer
-from library_api.models import Book
+from library_api.serializers import BookSerializer, BookTrackerSerializer, UserSerializer
+from library_api.models import Book, BookTracker
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from django.contrib.auth.models import User
 
 
 # auth users can get and create books
@@ -40,3 +41,17 @@ class BookDestroy(generics.DestroyAPIView):
 	queryset = Book.objects.all()
 	serializer_class = BookSerializer
 	permission_classes = [permissions.IsAdminUser]
+
+
+class UserList(generics.ListAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
+
+
+class BookTrackerListCreate(generics.ListCreateAPIView):
+	queryset = BookTracker.objects.all()
+	serializer_class = BookTrackerSerializer
+	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user)
