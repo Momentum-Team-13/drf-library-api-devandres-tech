@@ -24,6 +24,7 @@ class BookTrackerSerializer(serializers.ModelSerializer):
 		return obj.get_status_display()
 
 	book_status = serializers.SerializerMethodField(read_only=True, source='get_book_status')
+	book = BookSerializer(read_only=True)
 
 	class Meta:
 		model = BookTracker
