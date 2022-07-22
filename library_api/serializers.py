@@ -37,11 +37,3 @@ class BookTrackerSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = BookTracker
 		fields = "__all__"
-
-
-# class BookNotesSerializer(serializers.ModelSerializer):
-# 	notes = NoteSerializer(many=True)
-
-# 	class Meta:
-# 		model = Book
-# 		fields = ['title', 'author', 'notes']	

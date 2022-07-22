@@ -46,11 +46,24 @@ class BookDestroy(generics.DestroyAPIView):
 	permission_classes = [permissions.IsAdminUser]
 
 
+class BookNoteUpdate(generics.UpdateAPIView):
+	queryset = Note.objects.all()
+	serializer_class = NoteSerializer
+	permission_classes = [permissions.IsAuthenticated, IsOwner]
+	lookup_url_kwarg = 'note_pk'
+
+	def put(self, request, *args, **kwargs):
+		book_id = self.kwargs['pk']
+		request.data['book'] = book_id
+		return self.update(request, *args, **kwargs)
+
+
 class BookNotesListCreate(generics.ListCreateAPIView):
 	queryset = Note.objects.all()
 	serializer_class = NoteSerializer 
 	filter_backends = [DjangoFilterBackend]
 	permission_classes = [permissions.IsAuthenticated]
+	filterset_fields = ['public_status']
 
 	def post(self, request, *args, **kwargs):
 		book_id = self.kwargs['pk']
@@ -96,6 +109,3 @@ class BookTrackerRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = BookTrackerSerializer
 	permission_classes = [permissions.IsAuthenticated, IsOwner]
 	filter_backends = [IsOwnerFilterBackend]
-
-
-

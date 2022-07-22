@@ -8,5 +8,6 @@ class IsOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         # Write permissions are only allowed to the owner of the object.
+        print(f'user ------------', request.user, obj.user)
         return obj.user == request.user
 
