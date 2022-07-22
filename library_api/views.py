@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from library_api.serializers import BookNotesSerializer, BookSerializer, BookTrackerSerializer, UserSerializer, NoteSerializer
+from library_api.serializers import BookSerializer, BookTrackerSerializer, UserSerializer, NoteSerializer
 from library_api.models import Book, BookTracker, Note
 from library_api.filters import IsOwnerFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
@@ -46,9 +46,29 @@ class BookDestroy(generics.DestroyAPIView):
 	permission_classes = [permissions.IsAdminUser]
 
 
-class BookNotesList(generics.RetrieveAPIView):
-	queryset = Book.objects.all()
-	serializer_class = BookNotesSerializer 
+# class BookNotesList(generics.ListAPIView):
+# 	queryset = Book.objects.all()
+# 	serializer_class = BookNotesSerializer 
+
+
+class BookNotesListCreate(generics.ListCreateAPIView):
+	queryset = Note.objects.all()
+	serializer_class = NoteSerializer 
+	permission_classes = [permissions.IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		book_id = self.kwargs['pk']
+		request.data['book'] = book_id
+		return self.create(request, *args, **kwargs)
+
+	def perform_create(self, serializer):
+		serializer.save(user=self.request.user)
+
+	def list(self, request, *args, **kwargs):
+		book_id = self.kwargs['pk']
+		queryset = self.filter_queryset(self.get_queryset()).filter(book=book_id)
+		serializer = self.get_serializer(queryset, many=True)
+		return Response(serializer.data)
 
 
 # gets all users in db
