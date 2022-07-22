@@ -1,13 +1,6 @@
 from rest_framework import serializers
-from library_api.models import Book, BookTracker
+from library_api.models import Book, BookTracker, Note
 from django.contrib.auth.models import User
-
-
-class BookSerializer(serializers.ModelSerializer):
-
-	class Meta:
-		model = Book
-		fields = ['id', 'title', 'publication_date', 'genre', 'featured', 'author']
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,6 +9,21 @@ class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ['id', 'username', 'book_tracker']
+
+
+class NoteSerializer(serializers.ModelSerializer):
+	user = serializers.ReadOnlyField(source='user.username')
+
+	class Meta:
+		model = Note 
+		fields = "__all__"
+
+
+class BookSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Book
+		fields = ['id', 'title', 'publication_date', 'genre', 'featured', 'author']
 
 
 class BookTrackerSerializer(serializers.ModelSerializer):
@@ -29,5 +37,11 @@ class BookTrackerSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = BookTracker
 		fields = "__all__"
-		# fields = ['id', 'book_status', 'book', 'user', 'book_details']
 
+
+class BookNotesSerializer(serializers.ModelSerializer):
+	notes = NoteSerializer(many=True)
+
+	class Meta:
+		model = Book
+		fields = ['title', 'author', 'notes']	
