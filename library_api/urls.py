@@ -8,10 +8,8 @@ urlpatterns = [
 	path('books/<int:pk>', views.BookDestroy.as_view()),
 	path('books/<int:pk>', views.BookUpdate.as_view()),
 	path('books/<int:pk>/notes', views.BookNotesListCreate.as_view()),
-	# path('books/<int:pk>/notes', views.BookNotesList.as_view()),
 	path('book-trackers/', views.BookTrackerListCreate.as_view()),
 	path('book-trackers/<int:pk>', views.BookTrackerRetrieveUpdateDestroy.as_view()),
-	# path('notes/', views.NoteListCreate.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

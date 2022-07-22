@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 from library_api.serializers import BookSerializer, BookTrackerSerializer, UserSerializer, NoteSerializer
 from library_api.models import Book, BookTracker, Note
-from library_api.filters import IsOwnerFilterBackend
+from library_api.filters import IsOwnerFilterBackend 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.contrib.auth.models import User
@@ -46,14 +46,10 @@ class BookDestroy(generics.DestroyAPIView):
 	permission_classes = [permissions.IsAdminUser]
 
 
-# class BookNotesList(generics.ListAPIView):
-# 	queryset = Book.objects.all()
-# 	serializer_class = BookNotesSerializer 
-
-
 class BookNotesListCreate(generics.ListCreateAPIView):
 	queryset = Note.objects.all()
 	serializer_class = NoteSerializer 
+	filter_backends = [DjangoFilterBackend]
 	permission_classes = [permissions.IsAuthenticated]
 
 	def post(self, request, *args, **kwargs):
@@ -67,7 +63,9 @@ class BookNotesListCreate(generics.ListCreateAPIView):
 	def list(self, request, *args, **kwargs):
 		book_id = self.kwargs['pk']
 		queryset = self.filter_queryset(self.get_queryset()).filter(book=book_id)
-		serializer = self.get_serializer(queryset, many=True)
+		owner_qs = queryset.filter(user=request.user)
+		public_qs = queryset.exclude(user=request.user).filter(public_status=True)
+		serializer = self.get_serializer(owner_qs.union(public_qs), many=True)
 		return Response(serializer.data)
 
 
@@ -99,13 +97,5 @@ class BookTrackerRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 	permission_classes = [permissions.IsAuthenticated, IsOwner]
 	filter_backends = [IsOwnerFilterBackend]
 
-
-class NoteListCreate(generics.ListCreateAPIView):
-	queryset = Note.objects.all()
-	serializer_class = NoteSerializer
-	permission_classes = [permissions.IsAuthenticated]
-
-	def perform_create(self, serializer):
-		serializer.save(user=self.request.user)
 
 
