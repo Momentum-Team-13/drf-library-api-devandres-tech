@@ -8,6 +8,8 @@ django = "*"
 psycopg2-binary = "*"
 django-environ = "*"
 django-filter = "*"
+django-on-heroku = "*"
+gunicorn = "*"
 
 [dev-packages]
 flake8 = "*"
