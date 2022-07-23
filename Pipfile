@@ -10,6 +10,7 @@ django-environ = "*"
 django-filter = "*"
 django-on-heroku = "*"
 gunicorn = "*"
+djangorestframework = "*"
 
 [dev-packages]
 flake8 = "*"
