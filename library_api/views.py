@@ -78,7 +78,8 @@ class BookNotesListCreate(generics.ListCreateAPIView):
 		queryset = self.filter_queryset(self.get_queryset()).filter(book=book_id)
 		owner_qs = queryset.filter(user=request.user)
 		public_qs = queryset.exclude(user=request.user).filter(public_status=True)
-		serializer = self.get_serializer(owner_qs.union(public_qs), many=True)
+		merged_qs = owner_qs.union(public_qs).order_by('-created_at') 
+		serializer = self.get_serializer(merged_qs, many=True)
 		return Response(serializer.data)
 
 
