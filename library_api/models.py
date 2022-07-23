@@ -44,7 +44,8 @@ class BookTracker(BaseModel):
 
 class Note(BaseModel):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, related_name='notes', on_delete=models.CASCADE)
+    # should avoid deleting a note when a book is deleted, will set key to NULL
+    book = models.ForeignKey(Book, related_name='notes', on_delete=models.SET_NULL, null=True)
     note = models.TextField(max_length=300)
     public_status = models.BooleanField()
     page = models.IntegerField(null=True)
