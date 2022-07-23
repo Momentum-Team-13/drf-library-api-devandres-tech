@@ -22,25 +22,9 @@ class BookListCreate(generics.ListCreateAPIView):
 	search_fields = ['author', 'title']
 
 
-# auth users can see book details
-# GET api/books/<int:pk>
-class BookDetails(generics.RetrieveAPIView):
-	queryset = Book.objects.all()
-	serializer_class = BookSerializer
-	permission_classes = [permissions.IsAuthenticated]
-
-
-# only admin users can update books
-# PUT api/books/<int:pk>
-class BookUpdate(generics.UpdateAPIView):
-	queryset = Book.objects.all()
-	serializer_class = BookSerializer
-	permission_classes = [permissions.IsAdminUser]
-
-
-# only admin users can destroy books
-# DELETE api/books/<int:pk>
-class BookDestroy(generics.DestroyAPIView):
+# only admin users can update, get, and delete books
+# PUT, GET, DELETE api/books/<int:pk>
+class BookRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Book.objects.all()
 	serializer_class = BookSerializer
 	permission_classes = [permissions.IsAdminUser]
