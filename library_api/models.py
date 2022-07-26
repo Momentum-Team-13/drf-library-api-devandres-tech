@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from django.db import models
 
 
@@ -16,6 +17,7 @@ class Book(BaseModel):
     publication_date = models.DateTimeField()
     genre = models.TextField()
     featured = models.BooleanField()
+    image = models.ImageField(null=True, blank=True)
 
     class Meta:
         constraints = [

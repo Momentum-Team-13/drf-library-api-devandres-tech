@@ -12,6 +12,7 @@ django-on-heroku = "*"
 gunicorn = "*"
 djangorestframework = "*"
 djoser = "*"
+pillow = "*"
 
 [dev-packages]
 flake8 = "*"

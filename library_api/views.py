@@ -7,6 +7,8 @@ from rest_framework import filters
 from django.contrib.auth.models import User
 from library_api.permissions import IsOwner
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 
 # auth users can get and create books
@@ -16,10 +18,11 @@ from rest_framework.response import Response
 class BookListCreate(generics.ListCreateAPIView):
 	queryset = Book.objects.all()
 	serializer_class = BookSerializer
-	permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+	# permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 	filter_backends = [DjangoFilterBackend, filters.SearchFilter]
 	filterset_fields = ['featured']
 	search_fields = ['author', 'title']
+	parser_classes = (MultiPartParser, FormParser, JSONParser)
 
 
 # only admin users can update, get, and delete books
@@ -94,3 +97,16 @@ class BookTrackerRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = BookTrackerSerializer
 	permission_classes = [permissions.IsAuthenticated, IsOwner]
 	filter_backends = [IsOwnerFilterBackend]
+
+
+@api_view(['POST'])
+def uploadImage(request):
+	data = request.data
+
+	obj_id = data['id']
+	obj = Book.objects.get(pk=obj_id)
+
+	obj.image = request.FILES.get('image')
+	obj.save()
+
+	return Response('Image was uploaded')
